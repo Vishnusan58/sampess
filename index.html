@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Grocery Store</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">GS</span>
+        <span class="brand-name">Grocery Store</span>
+      </div>
+      <nav id="app-nav" class="nav hidden">
+        <button class="ghost" data-view="home">Home</button>
+        <button class="ghost" data-view="profile">My Profile</button>
+        <button class="ghost" data-view="cart">Cart</button>
+        <button class="danger ghost" id="logout-btn">Logout</button>
+        <div class="user-chip" id="user-chip">Hello, Guest</div>
+      </nav>
+    </header>
+
+    <main class="content">
+      <section id="login-view" class="panel">
+        <div class="panel-header">
+          <h1>Welcome Back</h1>
+          <p>Log in to continue shopping.</p>
+        </div>
+        <form id="login-form" class="stack">
+          <label class="field">
+            <span>Customer ID</span>
+            <input id="login-id" name="loginId" type="text" autocomplete="username" required>
+          </label>
+          <label class="field">
+            <span>Password</span>
+            <input id="login-password" name="loginPassword" type="password" maxlength="30" autocomplete="current-password" required>
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="primary">Login</button>
+            <button type="button" id="show-register" class="ghost">New User? Register Yourself</button>
+          </div>
+          <p id="login-message" class="message"></p>
+        </form>
+      </section>
+
+      <section id="register-view" class="panel hidden">
+        <div class="panel-header">
+          <h1>Create Your Account</h1>
+          <p>Register to get your unique customer ID.</p>
+        </div>
+        <form id="register-form" class="stack">
+          <label class="field">
+            <span>Full Name</span>
+            <input id="reg-name" name="name" type="text" required>
+          </label>
+          <label class="field">
+            <span>Email</span>
+            <input id="reg-email" name="email" type="email" required>
+          </label>
+          <label class="field">
+            <span>Phone</span>
+            <input id="reg-phone" name="phone" type="tel" required>
+          </label>
+          <label class="field">
+            <span>Address</span>
+            <input id="reg-address" name="address" type="text" required>
+          </label>
+          <label class="field">
+            <span>Password</span>
+            <input id="reg-password" name="password" type="password" maxlength="30" required>
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="primary">Register</button>
+            <button type="button" id="back-to-login" class="ghost">Back to Login</button>
+          </div>
+          <p id="register-message" class="message success"></p>
+        </form>
+        <div id="registration-table" class="data-card hidden">
+          <div class="data-card-header">
+            <h2>Registration Table</h2>
+            <p>Keep this Customer ID safe for login.</p>
+          </div>
+          <table>
+            <tbody>
+              <tr><th>Customer ID</th><td id="tbl-id">-</td></tr>
+              <tr><th>Name</th><td id="tbl-name">-</td></tr>
+              <tr><th>Email</th><td id="tbl-email">-</td></tr>
+              <tr><th>Phone</th><td id="tbl-phone">-</td></tr>
+              <tr><th>Address</th><td id="tbl-address">-</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="home-view" class="panel hidden">
+        <div class="panel-header">
+          <h1 id="greeting">Hello to Online Grocery Store</h1>
+          <p>Pick your essentials and add them to the cart.</p>
+        </div>
+        <div id="products-grid" class="grid"></div>
+      </section>
+
+      <section id="profile-view" class="panel hidden">
+        <div class="panel-header">
+          <h1>My Profile</h1>
+          <p>View or update the details you registered with.</p>
+        </div>
+        <form id="profile-form" class="stack readonly">
+          <label class="field">
+            <span>Customer ID</span>
+            <input id="profile-id" type="text" disabled>
+          </label>
+          <label class="field">
+            <span>Full Name</span>
+            <input id="profile-name" type="text" disabled required>
+          </label>
+          <label class="field">
+            <span>Email</span>
+            <input id="profile-email" type="email" disabled required>
+          </label>
+          <label class="field">
+            <span>Phone</span>
+            <input id="profile-phone" type="tel" disabled required>
+          </label>
+          <label class="field">
+            <span>Address</span>
+            <input id="profile-address" type="text" disabled required>
+          </label>
+          <div class="form-actions">
+            <button type="button" id="edit-profile" class="ghost">Update</button>
+            <button type="submit" id="save-profile" class="primary hidden">Save</button>
+          </div>
+          <p id="profile-message" class="message success"></p>
+        </form>
+        <div id="profile-table" class="data-card">
+          <div class="data-card-header">
+            <h2>Registration Table</h2>
+            <p>Shows the latest details saved.</p>
+          </div>
+          <table>
+            <tbody>
+              <tr><th>Customer ID</th><td id="profile-tbl-id">-</td></tr>
+              <tr><th>Name</th><td id="profile-tbl-name">-</td></tr>
+              <tr><th>Email</th><td id="profile-tbl-email">-</td></tr>
+              <tr><th>Phone</th><td id="profile-tbl-phone">-</td></tr>
+              <tr><th>Address</th><td id="profile-tbl-address">-</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="cart-view" class="panel hidden">
+        <div class="panel-header">
+          <h1>Your Cart</h1>
+          <p>Review products, remove items, and checkout.</p>
+        </div>
+        <div class="cart-layout">
+          <div class="cart-items" id="cart-items"></div>
+          <div class="cart-summary">
+            <div class="summary-card">
+              <div class="summary-row">
+                <span>Products</span>
+                <span id="summary-items">0</span>
+              </div>
+              <div class="summary-row total">
+                <span>Total Amount</span>
+                <span id="summary-total">$0.00</span>
+              </div>
+              <button id="checkout-btn" class="primary block">Checkout</button>
+            </div>
+            <p id="cart-message" class="message"></p>
+          </div>
+        </div>
+        <div id="invoice-section" class="invoice hidden">
+          <div class="invoice-header">
+            <h2>Invoice</h2>
+            <p class="message success" id="checkout-success">Order Placed Successfully</p>
+          </div>
+          <div class="invoice-body">
+            <div class="invoice-meta">
+              <span id="invoice-id">Order: -</span>
+              <span id="invoice-date">Date: -</span>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Qty</th>
+                  <th>Price</th>
+                  <th>Line Total</th>
+                </tr>
+              </thead>
+              <tbody id="invoice-lines"></tbody>
+            </table>
+            <div class="invoice-total">
+              <span>Total</span>
+              <span id="invoice-total">$0.00</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
