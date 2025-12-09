@@ -158,6 +158,7 @@ function renderGreeting() {
 function renderProducts() {
   productsGrid.innerHTML = '';
   products.forEach((product) => {
+    const qty = state.cart.find((item) => item.productId === product.id)?.qty || 0;
     const card = document.createElement('div');
     card.className = 'product-card';
     card.innerHTML = `
@@ -165,7 +166,14 @@ function renderProducts() {
         <p class="product-title">${product.name}</p>
         <p class="price">$${product.price.toFixed(2)}</p>
       </div>
-      <button class="primary block" data-add="${product.id}">Add to Cart</button>
+      <div class="product-footer">
+        <div class="qty-controls compact">
+          <button class="ghost" data-dec="${product.id}">-</button>
+          <span class="qty">${qty}</span>
+          <button class="ghost" data-inc="${product.id}">+</button>
+        </div>
+        <button class="ghost" data-add="${product.id}">Add</button>
+      </div>
     `;
     productsGrid.appendChild(card);
   });
@@ -237,7 +245,11 @@ function renderCart() {
           <div>${product.name}</div>
           <div class="message">$${product.price.toFixed(2)} each</div>
         </div>
-        <div>Qty: ${item.qty}</div>
+        <div class="qty-controls">
+          <button class="ghost" data-dec="${product.id}">-</button>
+          <span class="qty">${item.qty}</span>
+          <button class="ghost" data-inc="${product.id}">+</button>
+        </div>
         <button class="ghost danger" data-remove="${product.id}">Delete</button>
       `;
       cartItemsEl.appendChild(row);
@@ -281,6 +293,7 @@ function addToCart(productId) {
   }
   saveCart();
   renderCart();
+  renderProducts();
   cartMessage.textContent = 'Item added to cart.';
 }
 
@@ -288,7 +301,23 @@ function removeFromCart(productId) {
   state.cart = state.cart.filter((item) => item.productId !== productId);
   saveCart();
   renderCart();
+  renderProducts();
   cartMessage.textContent = 'Item removed.';
+}
+
+function updateQuantity(productId, delta) {
+  const item = state.cart.find((i) => i.productId === productId);
+  if (!item) return;
+  const next = item.qty + delta;
+  if (next <= 0) {
+    removeFromCart(productId);
+    return;
+  }
+  item.qty = next;
+  saveCart();
+  renderCart();
+  renderProducts();
+  cartMessage.textContent = 'Quantity updated.';
 }
 
 function handleCheckout() {
@@ -476,11 +505,19 @@ function bindEvents() {
   productsGrid.addEventListener('click', (e) => {
     const addId = e.target.dataset.add;
     if (addId) addToCart(addId);
+    const incId = e.target.dataset.inc;
+    if (incId) addToCart(incId);
+    const decId = e.target.dataset.dec;
+    if (decId) updateQuantity(decId, -1);
   });
 
   cartItemsEl.addEventListener('click', (e) => {
     const removeId = e.target.dataset.remove;
     if (removeId) removeFromCart(removeId);
+    const incId = e.target.dataset.inc;
+    if (incId) updateQuantity(incId, 1);
+    const decId = e.target.dataset.dec;
+    if (decId) updateQuantity(decId, -1);
   });
 
   editProfileBtn.addEventListener('click', () => toggleProfileEditing(true));
