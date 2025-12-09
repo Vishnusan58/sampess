@@ -236,7 +236,7 @@ th {
   padding: 16px;
   background: rgba(255, 255, 255, 0.02);
   display: grid;
-  gap: 10px;
+  gap: 12px;
 }
 
 .product-title {
@@ -247,6 +247,13 @@ th {
 .price {
   color: var(--accent-strong);
   font-weight: 700;
+}
+
+.product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .user-chip {
@@ -281,6 +288,27 @@ th {
 
 .cart-row:last-child {
   border-bottom: none;
+}
+
+.qty-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qty-controls.compact button {
+  width: 34px;
+  padding: 8px 0;
+}
+
+.qty-controls button {
+  width: 36px;
+  padding: 10px 0;
+}
+
+.qty-controls .qty {
+  min-width: 18px;
+  text-align: center;
 }
 
 .cart-summary .summary-card {
